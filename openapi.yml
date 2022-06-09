@@ -1,0 +1,110 @@
+swagger: '2.0'
+info:
+  title: Cinema Bookings API
+  version: 0.0.1
+host: localhost:4040
+basePath: /
+schemes:
+  - http
+paths:
+  /movies:
+    get:
+      summary: Retrieve a list of movies
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            example:
+              {
+                "data": [
+                  {
+                    "id": 1,
+                    "title": "The Matrix",
+                    "runtimeMins": 120,
+                    "createdAt": "2022-06-09T08:49:28.303Z",
+                    "updatedAt": "2022-06-09T08:49:28.303Z",
+                    "screenings": [
+                      {
+                        "id": 1,
+                        "movieId": 1,
+                        "screenId": 1,
+                        "startsAt": "2022-06-09T08:49:28.952Z",
+                        "createdAt": "2022-06-09T08:49:28.959Z",
+                        "updatedAt": "2022-06-09T08:49:28.960Z"
+                      },
+                      {
+                        "id": 3,
+                        "movieId": 1,
+                        "screenId": 2,
+                        "startsAt": "2022-06-10T08:49:28.952Z",
+                        "createdAt": "2022-06-09T08:49:29.469Z",
+                        "updatedAt": "2022-06-09T08:49:29.470Z"
+                      }
+                    ]
+                  },
+                  {
+                    "id": 2,
+                    "title": "Dodgeball",
+                    "runtimeMins": 154,
+                    "createdAt": "2022-06-09T08:49:28.490Z",
+                    "updatedAt": "2022-06-09T08:49:28.490Z",
+                    "screenings": [
+                      {
+                        "id": 2,
+                        "movieId": 2,
+                        "screenId": 1,
+                        "startsAt": "2022-06-10T08:49:28.952Z",
+                        "createdAt": "2022-06-09T08:49:29.268Z",
+                        "updatedAt": "2022-06-09T08:49:29.269Z"
+                      },
+                      {
+                        "id": 4,
+                        "movieId": 2,
+                        "screenId": 2,
+                        "startsAt": "2022-06-11T08:49:28.952Z",
+                        "createdAt": "2022-06-09T08:49:29.670Z",
+                        "updatedAt": "2022-06-09T08:49:29.670Z"
+                      }
+                    ]
+                  }
+                ]
+              }
+    post:
+      summary: Create a movie
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: The movie to create.
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              runtimeMins:
+                type: integer
+            example:
+              {
+                "title": "Cohort 5: The Movie",
+                "runtimeMins": "180"
+              }
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            example:
+              {
+                "data": {
+                  "id": 5,
+                  "title": "Cohort 5: The Movie",
+                  "runtimeMins": 180,
+                  "createdAt": "2022-06-09T11:18:18.163Z",
+                  "updatedAt": "2022-06-09T11:18:18.167Z"
+                }
+              }

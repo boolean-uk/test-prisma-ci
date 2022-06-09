@@ -28,9 +28,11 @@ The full database schema and seed file for this exercise has already been implem
 ## Instructions
 
 - Run the app with `npm start`
+- Run a server to view the API specification with `npm run api-docs`
+- Inspect the api docs at `http://localhost:3000`
 - Work through each file in the `requirements` directory in numerical order
 
-## Testing your work
+## Manual Testing
 
 So far, you may have been using `curl` to test your API endpoints. You can continue to use this approach if you choose, or you can download a tool to make things a little easier. There are two main options:
 
@@ -38,3 +40,9 @@ So far, you may have been using `curl` to test your API endpoints. You can conti
 - [Postman](https://www.postman.com/)
 
 These tools are quite similar to your web browser but have some additional functionality to make structuring API requests easier.
+
+## Testing with Jest
+
+1. Create a new database in elephantSQL (or locally) and copy the database URL to the env file `.env.test`
+2. Ensure your database is prepared by running `npm run testdb:reset`
+3. Run your test suite using `npm test`
