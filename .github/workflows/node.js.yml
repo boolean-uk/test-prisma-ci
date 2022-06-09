@@ -37,7 +37,7 @@ jobs:
           # Maps tcp port 5432 on service container to the host
           - 5432:5432
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test?schema=prisma
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -46,5 +46,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm run testdb:reset
+    - run: npx prisma migrate reset --force --skip-seed
     - run: npm test
