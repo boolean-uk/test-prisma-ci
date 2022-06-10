@@ -7,7 +7,7 @@
     "start": "npx nodemon src/index.js",
     "test": "npx jest -i",
     "api-docs": "npx serve docs",
-    "testdb:reset": "NODE_ENV=test npx prisma migrate reset --skip-seed"
+    "testdb:reset": "NODE_ENV=test npx prisma migrate reset --force --skip-seed"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
