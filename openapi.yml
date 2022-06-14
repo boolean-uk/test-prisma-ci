@@ -1,4 +1,4 @@
-swagger: '2.0'
+openapi: 3.0.0
 info:
   title: Cinema Bookings API
   version: 0.0.1
@@ -13,98 +13,91 @@ paths:
       produces:
         - application/json
       responses:
-        '200':
-          description: ''
-          schema:
-            type: object
-            example:
-              {
-                "data": [
-                  {
-                    "id": 1,
-                    "title": "The Matrix",
-                    "runtimeMins": 120,
-                    "createdAt": "2022-06-09T08:49:28.303Z",
-                    "updatedAt": "2022-06-09T08:49:28.303Z",
-                    "screenings": [
-                      {
-                        "id": 1,
-                        "movieId": 1,
-                        "screenId": 1,
-                        "startsAt": "2022-06-09T08:49:28.952Z",
-                        "createdAt": "2022-06-09T08:49:28.959Z",
-                        "updatedAt": "2022-06-09T08:49:28.960Z"
-                      },
-                      {
-                        "id": 3,
-                        "movieId": 1,
-                        "screenId": 2,
-                        "startsAt": "2022-06-10T08:49:28.952Z",
-                        "createdAt": "2022-06-09T08:49:29.469Z",
-                        "updatedAt": "2022-06-09T08:49:29.470Z"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 2,
-                    "title": "Dodgeball",
-                    "runtimeMins": 154,
-                    "createdAt": "2022-06-09T08:49:28.490Z",
-                    "updatedAt": "2022-06-09T08:49:28.490Z",
-                    "screenings": [
-                      {
-                        "id": 2,
-                        "movieId": 2,
-                        "screenId": 1,
-                        "startsAt": "2022-06-10T08:49:28.952Z",
-                        "createdAt": "2022-06-09T08:49:29.268Z",
-                        "updatedAt": "2022-06-09T08:49:29.269Z"
-                      },
-                      {
-                        "id": 4,
-                        "movieId": 2,
-                        "screenId": 2,
-                        "startsAt": "2022-06-11T08:49:28.952Z",
-                        "createdAt": "2022-06-09T08:49:29.670Z",
-                        "updatedAt": "2022-06-09T08:49:29.670Z"
-                      }
-                    ]
-                  }
-                ]
-              }
+        200:
+          description: OK
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Movie'
     post:
       summary: Create a movie
-      parameters:
-        - name: body
-          in: body
-          required: true
-          description: The movie to create.
-          schema:
-            type: object
-            properties:
-              title:
-                type: string
-              runtimeMins:
-                type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                runtimeMins:
+                  type: interger
             example:
-              {
-                "title": "Cohort 5: The Movie",
-                "runtimeMins": "180"
-              }
+              title: The Matrix
+              runtimeMins: 136
+      responses:
+        400:
+          description: Bad request. One or more of the required fields are missing or invalid.
+        200:
+          description: OK
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/Movie"
+              example:
+                data:
+                  id: 1
+                  title: The Matrix
+                  runtimeMins: 136
+                  createdAt: 2022-06-09T08:49:28.952Z
+                  updatedAt: 2022-06-09T08:49:28.952Z
+  /movies/{movieId}:
+    get:
+      summary: Get a movie by ID
       produces:
         - application/json
       responses:
-        '200':
-          description: ''
-          schema:
-            type: object
-            example:
-              {
-                "data": {
-                  "id": 5,
-                  "title": "Cohort 5: The Movie",
-                  "runtimeMins": 180,
-                  "createdAt": "2022-06-09T11:18:18.163Z",
-                  "updatedAt": "2022-06-09T11:18:18.167Z"
-                }
-              }
+        404: 
+          description: The requested Movie could not be found.
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/Movie"
+              example:
+                data:
+                  id: 1
+                  title: The Matrix
+                  runtimeMins: 136
+                  createdAt: 2022-06-09T08:49:28.952Z
+                  updatedAt: 2022-06-09T08:49:28.952Z
+
+components:
+  schemas:
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        runtimeMins:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
