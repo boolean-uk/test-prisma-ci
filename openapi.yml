@@ -10,8 +10,6 @@ paths:
   /movies:
     get:
       summary: Retrieve a list of movies
-      produces:
-        - application/json
       responses:
         200:
           description: OK
@@ -78,9 +76,71 @@ paths:
                   data:
                     type: object
                     $ref: "#/components/schemas/MovieWithScreenings"
+  /customer/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+            example:
+              name: 'John'
+              phone: '123456'
+              email: john@test.com
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/Customer'
+        400:
+          description: One or more of the required fields are missing or invalid
+        409:
+          description: The email provided is already in use  
 
 components:
   schemas:
+    Contact: 
+      type: object
+      properties:
+        id: 
+          type: integer
+        phone:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+        updatedAt: 
+          type: string
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+        name: 
+          type: string
+        contact:
+          type: object
+          $ref: '#/components/schemas/Contact'
+        createdAt:
+          type: string
+        updatedAt: 
+          type: string
     Screening:
       type: object
       properties:
