@@ -1,4 +1,5 @@
 const prisma = require("../src/utils/prisma");
+const { createMovie } = require("./helpers/create-movie");
 
 const setUpMovies = async () => {
   const screens = await Promise.all(
@@ -7,36 +8,10 @@ const setUpMovies = async () => {
     )
   );
 
-  const matrix = await prisma.movie.create({
-    data: {
-      title: "The Matrix",
-      runtimeMins: 120,
-      screenings: {
-        create: [
-          {
-            startsAt: "2022-06-11T18:30:00.000Z",
-            screenId: screens[0].id,
-          },
-        ],
-      },
-    },
-  });
+  const matrix = await createMovie('The Matrix', 136, screens[0])
   process.env.matrixID = matrix.id
 
-  await prisma.movie.create({
-    data: {
-      title: "Dodgeball",
-      runtimeMins: 154,
-      screenings: {
-        create: [
-          {
-            startsAt: "2022-06-10T21:30:00.000Z",
-            screenId: screens[1].id,
-          },
-        ],
-      },
-    },
-  });
+  await createMovie('Dodgeball', 154, screens[1])
 };
 
 const deleteTables = () => {
