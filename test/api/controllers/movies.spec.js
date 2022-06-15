@@ -32,6 +32,7 @@ describe("Movies Endpoint", () => {
       const request = {};
       const response = await supertest(app).post("/movies").send(request);
       expect(response.status).toEqual(400);
+      expect(response.body.error).toEqual("both title and runtimeMins are required properties")
     });
   });
   describe('GET /movies/{movieId}', () => {
