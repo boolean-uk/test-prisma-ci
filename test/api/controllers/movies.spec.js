@@ -44,8 +44,10 @@ describe("Movies Endpoint", () => {
       expect(response.body.data.title).toEqual('The Matrix')
     })
     it('will 404 if the movie with the provided ID does not exist', async () => {
-      const response = await supertest(app).get("/movies/10000");
+      const id = 10000
+      const response = await supertest(app).get(`/movies/${id}`);
       expect(response.status).toEqual(404);
+      expect(response.body.error).toEqual(`sorry movie id: ${id} not found`)
     })
   })
 });
