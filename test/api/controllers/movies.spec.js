@@ -1,9 +1,14 @@
 const supertest = require("supertest");
 const app = require("../../../src/server.js");
+const { createMovie } = require("../../helpers/create-movie.js");
 
 describe("Movies Endpoint", () => {
   describe("GET /movies", () => {
     it("returns a list of movies", async () => {
+      //set up
+      await createMovie('The Matrix', 136)
+      await createMovie('Dodgeball', 154)
+
       const response = await supertest(app).get("/movies");
       expect(response.status).toEqual(200);
       expect(response.body.data).not.toEqual(undefined);
@@ -21,6 +26,7 @@ describe("Movies Endpoint", () => {
         runtimeMins: 110,
       };
       const response = await supertest(app).post("/movies").send(request);
+      
       expect(response.status).toEqual(200);
       expect(response.body.data).not.toEqual(undefined);
       expect(response.body.data.title).toEqual(request.title);
@@ -37,8 +43,10 @@ describe("Movies Endpoint", () => {
   });
   describe('GET /movies/{movieId}', () => {
     it('will return the correct movie', async () => {
-      const {matrixID} = process.env
-      const response = await supertest(app).get(`/movies/${matrixID}`);
+      const matrix = await createMovie('The Matrix', 136)
+
+      const response = await supertest(app).get(`/movies/${matrix.id}`);
+
       expect(response.status).toEqual(200);
       expect(response.body.data).not.toEqual(undefined);
       expect(response.body.data.title).toEqual('The Matrix')
