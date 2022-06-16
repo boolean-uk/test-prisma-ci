@@ -1,3 +1,4 @@
+const { Prisma } = require('@prisma/client');
 const prisma = require('../utils/prisma');
 
 const createCustomer = async (req, res) => {
@@ -7,22 +8,35 @@ const createCustomer = async (req, res) => {
         email
     } = req.body;
 
-    const createdCustomer = await prisma.customer.create({
-        data: {
-            name,
-            contact: {
-                create: {
-                    phone,
-                    email
-                }
-            }
-        },
-        include: {
-            contact: true
+    if(!name || !phone || !email) {
+      return res.status(400).json({error: 'one or more of the required fields are missing or invalid'})
+    }
+    try {
+      const createdCustomer = await prisma.customer.create({
+          data: {
+              name,
+              contact: {
+                  create: {
+                      phone,
+                      email
+                  }
+              }
+          },
+          include: {
+              contact: true
+          }
+      })
+  
+      res.json({ data: createdCustomer });
+    }catch(err) {
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if(err.code === 'P2002') {
+          res.status(409).json({error: 'the email provided is already in use'})
+          return 
         }
-    })
-
-    res.json({ data: createdCustomer });
+      }
+      res.status(500).json({error: err.message})
+    }
 }
 
 const updateCustomer = async (req, res) => {
