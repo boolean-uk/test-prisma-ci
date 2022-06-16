@@ -112,6 +112,20 @@ paths:
           description: One or more of the required fields are missing or invalid
         409:
           description: The email provided is already in use  
+  /customer/{:id}:
+    patch:
+      summary: Update a Customer by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+            example:
+              name: Jane
 
 components:
   schemas:
