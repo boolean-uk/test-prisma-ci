@@ -47,4 +47,30 @@ describe("Customer Endpoint", () => {
       );
     });
   });
+  describe("PATCH /customer/:id", () => {
+    it("can update a customers name", async () => {
+      const customer = await createCustomer("John", "123456", "john@test.com");
+      const request = {
+        name: "Jane",
+      };
+
+      const response = await supertest(app)
+        .patch(`/customer/${customer.id}`)
+        .send(request);
+      expect(response.status).toEqual(200);
+      expect(response.body.data).not.toEqual(undefined);
+      expect(response.body.data.name).toEqual(request.name);
+    });
+    it('will return 404 if the customer is not found', async () => {
+      const request = {
+        name: "Jane",
+      };
+
+      const response = await supertest(app)
+        .patch(`/customer/10000`)
+        .send(request);
+      expect(response.status).toEqual(404);
+      expect(response.body.error).toEqual('customer not found');
+    })
+  });
 });

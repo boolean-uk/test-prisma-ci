@@ -136,6 +136,19 @@ paths:
                   type: string
             example:
               name: Jane
+      responses:
+        200: 
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  data: 
+                    type: object
+                    $ref: '#/components/schemas/Customer'
+        404:
+          description: Customer not found
 
 components:
   schemas:
