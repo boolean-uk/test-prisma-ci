@@ -11,6 +11,8 @@ paths:
   /movies:
     get:
       summary: Retrieve a list of movies
+      tags:
+        - movies
       responses:
         200:
           description: OK
@@ -25,6 +27,8 @@ paths:
                       $ref: '#/components/schemas/MovieWithScreenings'
     post:
       summary: Create a movie
+      tags:
+        - movies
       requestBody:
         required: true
         content:
@@ -62,6 +66,8 @@ paths:
   /movies/{movieId}:
     get:
       summary: Get a movie by ID
+      tags:
+        - movies
       produces:
         - application/json
       responses:
@@ -80,6 +86,8 @@ paths:
   /customer/register:
     post:
       summary: Register a new user
+      tags:
+        - customer
       requestBody:
         required: true
         content:
@@ -115,6 +123,8 @@ paths:
   /customer/{:id}:
     patch:
       summary: Update a Customer by ID
+      tags:
+        - customer
       requestBody:
         required: true
         content:
