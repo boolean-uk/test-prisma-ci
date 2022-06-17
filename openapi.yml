@@ -149,6 +149,38 @@ paths:
                     $ref: '#/components/schemas/Customer'
         404:
           description: Customer not found
+  /screens:
+    post:
+      summary: Create a screen
+      tags:
+        - screen
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                number: integer
+            example:
+              number: 1
+      produces:
+        - application/json
+      responses:
+        400:
+          description: Number is required
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/Screen'
+
+
 
 components:
   schemas:
@@ -218,6 +250,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Screening'
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    Screen:
+      type: object
+      properties:
+        id:
+          type: integer
+        number:
+          type: integer
         createdAt:
           type: string
         updatedAt:
