@@ -179,11 +179,61 @@ paths:
                   data:
                     type: object
                     $ref: '#/components/schemas/Screen'
-
+  /tickets:
+    post:
+      summary: Create a new ticket
+      tags:
+        - ticket
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                screeningId:
+                  type: integer
+                customerId:
+                  type: integer
+            example:
+              screenId: 1
+              customerId: 1
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: 
+                    type: object
+                    $ref: '#/components/schemas/Ticket'
+        400:
+          description: both screeningId and customerId are required and should point to existing resources
 
 
 components:
   schemas:
+    Ticket:
+      type: object
+      properties:
+        id: 
+          type: integer
+        screening:
+          type: object
+          $ref: '#/components/schemas/Screening'
+        screeningId: 
+          type: integer
+        customer:
+          type: object
+          $ref: '#/components/schemas/Customer'
+        customerId:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
     Contact: 
       type: object
       properties:

@@ -5,6 +5,9 @@ const createMovie = async (title, runtimeMins, screen=null) => {
         data: {
             title: title,
             runtimeMins: runtimeMins
+        },
+        include: {
+            screenings: true
         }
     }
     if(screen) {
