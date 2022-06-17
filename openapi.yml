@@ -1,8 +1,9 @@
-swagger: '2.0'
+openapi: 3.0.0
 info:
   title: Cinema Bookings API
   version: 0.0.1
-host: localhost:4040
+servers:
+  - url: http://localhost:4040
 basePath: /
 schemes:
   - http
@@ -10,101 +11,307 @@ paths:
   /movies:
     get:
       summary: Retrieve a list of movies
-      produces:
-        - application/json
+      tags:
+        - movies
       responses:
-        '200':
-          description: ''
-          schema:
-            type: object
-            example:
-              {
-                "data": [
-                  {
-                    "id": 1,
-                    "title": "The Matrix",
-                    "runtimeMins": 120,
-                    "createdAt": "2022-06-09T08:49:28.303Z",
-                    "updatedAt": "2022-06-09T08:49:28.303Z",
-                    "screenings": [
-                      {
-                        "id": 1,
-                        "movieId": 1,
-                        "screenId": 1,
-                        "startsAt": "2022-06-09T08:49:28.952Z",
-                        "createdAt": "2022-06-09T08:49:28.959Z",
-                        "updatedAt": "2022-06-09T08:49:28.960Z"
-                      },
-                      {
-                        "id": 3,
-                        "movieId": 1,
-                        "screenId": 2,
-                        "startsAt": "2022-06-10T08:49:28.952Z",
-                        "createdAt": "2022-06-09T08:49:29.469Z",
-                        "updatedAt": "2022-06-09T08:49:29.470Z"
-                      }
-                    ]
-                  },
-                  {
-                    "id": 2,
-                    "title": "Dodgeball",
-                    "runtimeMins": 154,
-                    "createdAt": "2022-06-09T08:49:28.490Z",
-                    "updatedAt": "2022-06-09T08:49:28.490Z",
-                    "screenings": [
-                      {
-                        "id": 2,
-                        "movieId": 2,
-                        "screenId": 1,
-                        "startsAt": "2022-06-10T08:49:28.952Z",
-                        "createdAt": "2022-06-09T08:49:29.268Z",
-                        "updatedAt": "2022-06-09T08:49:29.269Z"
-                      },
-                      {
-                        "id": 4,
-                        "movieId": 2,
-                        "screenId": 2,
-                        "startsAt": "2022-06-11T08:49:28.952Z",
-                        "createdAt": "2022-06-09T08:49:29.670Z",
-                        "updatedAt": "2022-06-09T08:49:29.670Z"
-                      }
-                    ]
-                  }
-                ]
-              }
+        200:
+          description: OK
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MovieWithScreenings'
     post:
       summary: Create a movie
-      parameters:
-        - name: body
-          in: body
-          required: true
-          description: The movie to create.
-          schema:
-            type: object
-            properties:
-              title:
-                type: string
-              runtimeMins:
-                type: integer
+      tags:
+        - movies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                runtimeMins:
+                  type: interger
             example:
-              {
-                "title": "Cohort 5: The Movie",
-                "runtimeMins": "180"
-              }
+              title: The Matrix
+              runtimeMins: 136
+      responses:
+        400:
+          description: Bad request. One or more of the required fields are missing or invalid.
+        200:
+          description: OK
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/Movie"
+              example:
+                data:
+                  id: 1
+                  title: The Matrix
+                  runtimeMins: 136
+                  createdAt: 2022-06-09T08:49:28.952Z
+                  updatedAt: 2022-06-09T08:49:28.952Z
+  /movies/{movieId}:
+    get:
+      summary: Get a movie by ID
+      tags:
+        - movies
       produces:
         - application/json
       responses:
-        '200':
-          description: ''
-          schema:
-            type: object
+        404: 
+          description: The requested Movie could not be found.
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/MovieWithScreenings"
+  /customer/register:
+    post:
+      summary: Register a new user
+      tags:
+        - customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
             example:
-              {
-                "data": {
-                  "id": 5,
-                  "title": "Cohort 5: The Movie",
-                  "runtimeMins": 180,
-                  "createdAt": "2022-06-09T11:18:18.163Z",
-                  "updatedAt": "2022-06-09T11:18:18.167Z"
-                }
-              }
+              name: 'John'
+              phone: '123456'
+              email: john@test.com
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/Customer'
+        400:
+          description: One or more of the required fields are missing or invalid
+        409:
+          description: The email provided is already in use  
+  /customer/{:id}:
+    patch:
+      summary: Update a Customer by ID
+      tags:
+        - customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+            example:
+              name: Jane
+      responses:
+        200: 
+          description: OK
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  data: 
+                    type: object
+                    $ref: '#/components/schemas/Customer'
+        404:
+          description: Customer not found
+  /screens:
+    post:
+      summary: Create a screen
+      tags:
+        - screen
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                number: integer
+            example:
+              number: 1
+      produces:
+        - application/json
+      responses:
+        400:
+          description: Number is required
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: '#/components/schemas/Screen'
+  /tickets:
+    post:
+      summary: Create a new ticket
+      tags:
+        - ticket
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                screeningId:
+                  type: integer
+                customerId:
+                  type: integer
+            example:
+              screenId: 1
+              customerId: 1
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: 
+                    type: object
+                    $ref: '#/components/schemas/Ticket'
+        400:
+          description: both screeningId and customerId are required and should point to existing resources
+
+
+components:
+  schemas:
+    Ticket:
+      type: object
+      properties:
+        id: 
+          type: integer
+        screening:
+          type: object
+          $ref: '#/components/schemas/Screening'
+        screeningId: 
+          type: integer
+        customer:
+          type: object
+          $ref: '#/components/schemas/Customer'
+        customerId:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    Contact: 
+      type: object
+      properties:
+        id: 
+          type: integer
+        phone:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+        updatedAt: 
+          type: string
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+        name: 
+          type: string
+        contact:
+          type: object
+          $ref: '#/components/schemas/Contact'
+        createdAt:
+          type: string
+        updatedAt: 
+          type: string
+    Screening:
+      type: object
+      properties:
+        id:
+          type: integer
+        movieId: 
+          type: integer
+        screenId: 
+          type: integer
+        createdAt:
+          type: string
+        updatedAt: 
+          type: string
+    Movie:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        runtimeMins:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    MovieWithScreenings:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        runtimeMins:
+          type: integer
+        screenings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Screening'
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    Screen:
+      type: object
+      properties:
+        id:
+          type: integer
+        number:
+          type: integer
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
